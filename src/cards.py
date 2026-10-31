@@ -286,8 +286,6 @@ def spotify_card(track, cover, theme_name):
     else:
         svg.rect(PAD, 24, 100, 100, theme["track"], rx=10)
 
-    svg.circle(x + 4, 34, 4, SPOTIFY_GREEN if track["playing"] else theme["muted"])
-
     svg.text(x, 68, fit(track["title"], 19, room), size=19, weight=700)
     svg.text(x, 90, fit(track["artists"], 14, room), size=14, fill=theme["muted"])
 

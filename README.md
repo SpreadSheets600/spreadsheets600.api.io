@@ -25,7 +25,7 @@ never serves a stale card.
 | `GET /ascii` | Plain-text terminal card (the current minimal renderer) |
 | `GET /snapshot` | Full JSON for GitHub, WakaTime, Steam, Spotify, AniList, and Discord |
 | `GET /discord` | Live Discord card as SVG: avatar, status, clan tag, profile badges and current activity (`?theme=dark\|light`) |
-| `GET /spotify` | Now playing or last played Spotify card as SVG (`?theme=dark\|light`) |
+| `GET /spotify` | Current or last played Spotify card as SVG (`?theme=dark\|light`) |
 
 JSON and text responses send `access-control-allow-origin: *`. `OPTIONS`
 requests return `204`, so the API can be called from a browser or another
