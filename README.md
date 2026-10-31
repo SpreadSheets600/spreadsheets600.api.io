@@ -36,7 +36,7 @@ frontend.
 Fetch the whole snapshot:
 
 ```bash
-export BASE=https://spreadsheets600-api.spreadsheets600.workers.dev
+export BASE=https://spreadsheets600-api-io.spreadsheets600.workers.dev
 
 curl -s "$BASE/snapshot" | jq .
 ```
@@ -336,7 +336,7 @@ checkout fails with `No module named 'workers'`.
 
 Connect the repo to the Worker with Cloudflare Workers Builds:
 
-1. Cloudflare dashboard → **Workers & Pages** → `spreadsheets600-api` →
+1. Cloudflare dashboard → **Workers & Pages** → `spreadsheets600-api-io` →
    **Settings → Builds → Connect**.
 2. Pick **GitHub** and this repository, branch `main`.
 3. Build command: leave empty. Deploy command: `uv run pywrangler deploy`.
@@ -349,7 +349,7 @@ Secrets and `[vars]` stay on the Worker, so they are not touched by a deploy.
 The profile README action needs to know where the Worker lives. In the profile
 repo add an Actions variable `PROFILE_API_BASE` (**Settings → Secrets and
 variables → Actions → Variables**) with the deployed URL, e.g.
-`https://spreadsheets600-api.<subdomain>.workers.dev`. The action runs at
+`https://spreadsheets600-api-io.<subdomain>.workers.dev`. The action runs at
 **00:30 and 12:30 UTC** and commits README, chart, and AniList cache changes only
 when the generated output differs.
 

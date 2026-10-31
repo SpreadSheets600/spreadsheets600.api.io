@@ -1,4 +1,4 @@
-name = "spreadsheets600-api"
+name = "spreadsheets600-api-io"
 main = "src/entry.py"
 compatibility_date = "2026-10-29"
 compatibility_flags = ["python_workers"]
