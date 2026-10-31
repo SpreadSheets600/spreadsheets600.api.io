@@ -7,3 +7,4 @@ src/vendor/
 __pycache__/
 *.pyc
 node_modules/
+pylock.toml

@@ -324,8 +324,13 @@ Manual deploy:
 
 ```bash
 npx wrangler login   # once per machine
-npx wrangler deploy
+uv sync
+uv run pywrangler deploy
 ```
+
+Use `pywrangler`, not plain `wrangler deploy`: it vendors the `workers` SDK into
+`python_modules/` (gitignored) before uploading, and a plain deploy from a clean
+checkout fails with `No module named 'workers'`.
 
 ### Automatic deploys from GitHub
 
@@ -334,7 +339,7 @@ Connect the repo to the Worker with Cloudflare Workers Builds:
 1. Cloudflare dashboard → **Workers & Pages** → `spreadsheets600-api` →
    **Settings → Builds → Connect**.
 2. Pick **GitHub** and this repository, branch `main`.
-3. Build command: leave empty. Deploy command: `npx wrangler deploy`.
+3. Build command: leave empty. Deploy command: `uv run pywrangler deploy`.
 4. Save. Every push to `main` now builds and deploys the Worker.
 
 Secrets and `[vars]` stay on the Worker, so they are not touched by a deploy.
