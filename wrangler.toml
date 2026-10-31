@@ -1,0 +1,19 @@
+name = "spreadsheets600-api"
+main = "src/entry.py"
+compatibility_date = "2026-10-29"
+compatibility_flags = ["python_workers"]
+
+[vars]
+GITHUB_LOGIN = "SpreadSheets600"
+STEAM_ID = "76561199634156460"
+DISCORD_ID = "727012870683885578"
+ANILIST_USERNAME = "SpreadSheeets"
+WALLPAPER_REPO = "SpreadSheets600/Wallpapers"
+WALLPAPER_BRANCH = "master"
+WALLPAPER_DIR = "Wallpapers"
+PROFILE_REPO = "SpreadSheets600/SpreadSheets600"
+PROFILE_BRANCH = "main"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "bf0ca021ee8f4079bc99dac7a2df75ef"
