@@ -286,20 +286,20 @@ def spotify_card(track, cover, theme_name):
     else:
         svg.rect(PAD, 24, 100, 100, theme["track"], rx=10)
 
-    svg.text(x, 68, fit(track["title"], 19, room), size=19, weight=700)
-    svg.text(x, 90, fit(track["artists"], 14, room), size=14, fill=theme["muted"])
+    svg.text(x, 44, fit(track["title"], 19, room), size=19, weight=700)
+    svg.text(x, 66, fit(track["artists"], 14, room), size=14, fill=theme["muted"])
 
     if track.get("album"):
-        svg.text(x, 110, fit(track["album"], 12, room), size=12, fill=theme["muted"])
+        svg.text(x, 86, fit(track["album"], 12, room), size=12, fill=theme["muted"])
 
     if track["playing"] and track.get("duration") and track.get("progress") is not None:
         fraction = min(track["progress"] / track["duration"], 1)
-        svg.rect(x, 122, room, 4, theme["track"], rx=2)
-        svg.rect(x, 122, max(room * fraction, 4), 4, SPOTIFY_GREEN, rx=2)
-        svg.text(x, 141, clock(track["progress"]), size=11, fill=theme["muted"])
+        svg.rect(x, 98, room, 4, theme["track"], rx=2)
+        svg.rect(x, 98, max(room * fraction, 4), 4, SPOTIFY_GREEN, rx=2)
+        svg.text(x, 117, clock(track["progress"]), size=11, fill=theme["muted"])
         svg.text(
             x + room,
-            141,
+            117,
             clock(track["duration"]),
             size=11,
             fill=theme["muted"],
@@ -310,7 +310,7 @@ def spotify_card(track, cover, theme_name):
         when = ago(track.get("playedAt"))
 
         if when:
-            svg.text(x, 134, f"Played {when}", size=12, fill=theme["muted"])
+            svg.text(x, 110, f"Played {when}", size=12, fill=theme["muted"])
 
     return svg.render()
 
