@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from xml.sax.saxutils import escape
 
 from images import data_uri
@@ -115,7 +115,7 @@ def ago(iso):
     except (AttributeError, ValueError):
         return None
 
-    seconds = int((datetime.now(timezone.utc) - then).total_seconds())
+    seconds = int((datetime.now(UTC) - then).total_seconds())
 
     if seconds < 90:
         return "just now"
@@ -287,15 +287,7 @@ def spotify_card(track, cover, theme_name):
         svg.rect(PAD, 24, 100, 100, theme["track"], rx=10)
 
     svg.circle(x + 4, 34, 4, SPOTIFY_GREEN if track["playing"] else theme["muted"])
-    svg.text(
-        x + 16,
-        38,
-        "NOW PLAYING" if track["playing"] else "LAST PLAYED",
-        size=11,
-        weight=600,
-        fill=theme["muted"],
-        spacing="0.08em",
-    )
+
     svg.text(x, 68, fit(track["title"], 19, room), size=19, weight=700)
     svg.text(x, 90, fit(track["artists"], 14, room), size=14, fill=theme["muted"])
 
