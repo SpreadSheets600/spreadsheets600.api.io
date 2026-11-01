@@ -1,3 +1,5 @@
+import re
+from html import unescape
 from urllib.parse import urlencode
 
 from workers import fetch
@@ -16,7 +18,10 @@ STATUS = {
 
 
 ACHIEVEMENT_GAME_LIMIT = 8
-TOP_GAME_LIMIT = 5
+TOP_GAME_LIMIT = 8
+RECENT_GAME_LIMIT = 8
+# Achievements are only checked for the top few games plus the recent ones.
+ACHIEVEMENT_TOP_GAMES = 5
 
 
 async def _get(path, params):
@@ -26,6 +31,35 @@ async def _get(path, params):
         return None
 
     return await response.json()
+
+
+async def _badge_list(config):
+    """Badge names and artwork come from the public badges page; the Web API only returns ids."""
+    try:
+        response = await fetch(f"https://steamcommunity.com/profiles/{config.steam_id}/badges/")
+
+        if response.status != 200:
+            return []
+
+        page = await response.text()
+
+    except Exception:
+        return []
+
+    found = []
+    pattern = re.compile(
+        r'<div class="badge_info_image">.*?data-delayed-image="([^"]+)".*?'
+        r'<div class="badge_info_title">(.*?)</div>',
+        re.S,
+    )
+
+    for image, title in pattern.findall(page):
+        title = unescape(re.sub(r"<[^>]+>", "", title)).strip()
+
+        if title and not any(item["name"] == title for item in found):
+            found.append({"name": title, "image": unescape(image)})
+
+    return found
 
 
 def _icon(appid, icon):
@@ -168,20 +202,37 @@ async def fetch_stats(config):
     last_played = max(played, key=lambda game: game["rtime_last_played"], default=None)
     latest_game = (recent_games or [None])[0] or last_played
 
+    # Steam only reports games played in the last two weeks; fill the rest of the list with the
+    # most recently played older games so it never looks empty (those have minutes = 0).
+    recent_ids = {game.get("appid") for game in recent_games}
+    earlier = sorted(
+        (
+            game
+            for game in games
+            if game.get("rtime_last_played")
+            and game.get("appid") not in recent_ids
+            and _minutes(game, "playtime_forever") > 0
+        ),
+        key=lambda game: game["rtime_last_played"],
+        reverse=True,
+    )
+    recent_list = recent_games + earlier[: max(0, RECENT_GAME_LIMIT - len(recent_games))]
+
     recent = [
         {
             "appid": game.get("appid"),
             "name": game.get("name"),
             "minutes": game.get("playtime_2weeks", 0),
             "totalMinutes": game.get("playtime_forever", 0),
+            "lastPlayed": game.get("rtime_last_played"),
             "icon": _icon(game.get("appid"), game.get("img_icon_url")),
         }
-        for game in recent_games
+        for game in recent_list
     ]
 
     candidates = []
 
-    for game in top_games + recent_games:
+    for game in top_games[:ACHIEVEMENT_TOP_GAMES] + recent_games:
         appid = game.get("appid")
 
         if appid and appid not in candidates:
@@ -247,6 +298,7 @@ async def fetch_stats(config):
         "xp": badge_response.get("player_xp", 0),
         "xpNeeded": badge_response.get("player_xp_needed_to_level_up", 0),
         "badges": len(badges),
+        "badgeList": await _badge_list(config),
         "ownedGames": owned.get("game_count", len(games)),
         "totalMinutes": total_minutes,
         "totalHours": round(total_minutes / 60),
