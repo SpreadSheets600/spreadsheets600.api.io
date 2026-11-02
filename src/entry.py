@@ -93,7 +93,7 @@ def health(config):
         "time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "sources": {
             "github": bool(config.github_token),
-            "wakatime": bool(config.wakatime_api_key),
+            "wakatime": bool(config.wakatime_token or config.wakatime_api_key),
             "steam": bool(config.steam_api_key and config.steam_id),
             "spotify": bool(
                 config.spotify_client_id

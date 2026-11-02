@@ -6,6 +6,7 @@ class Config:
     github_login: str
     github_token: str | None
     wakatime_api_key: str | None
+    wakatime_token: str | None
     steam_api_key: str | None
     steam_id: str | None
     spotify_client_id: str | None
@@ -38,6 +39,7 @@ def load(env):
         github_login=_get(env, "GITHUB_LOGIN", "SpreadSheets600"),
         github_token=_get(env, "GITHUB_TOKEN") or None,
         wakatime_api_key=_get(env, "WAKATIME_API_KEY") or None,
+        wakatime_token=_get(env, "WAKATIME_TOKEN") or None,
         steam_api_key=_get(env, "STEAM_API_KEY") or None,
         steam_id=_get(env, "STEAM_ID") or None,
         spotify_client_id=_get(env, "SPOTIFY_CLIENT_ID") or None,

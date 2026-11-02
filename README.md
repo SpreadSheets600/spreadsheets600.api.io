@@ -279,9 +279,11 @@ for the wallpaper tree (unauthenticated tree calls are rate-limited).
 
 ### WakaTime
 
-WakaTime's docs now prefer OAuth tokens for reads; the legacy API key still
-works with Basic auth and is what the existing README action uses. If reads start
-failing, generate an OAuth token and use it in place of the key.
+WakaTime API keys are write-only by design; reads should use an OAuth token.
+Generate one for your own account at <https://wakatime.com/oauth> with the
+`read_stats` and `read_summaries` scopes and store it as `WAKATIME_TOKEN`
+(sent as a Bearer token). If `WAKATIME_TOKEN` is unset, the worker falls back to
+`WAKATIME_API_KEY` with Basic auth.
 
 ### Steam
 

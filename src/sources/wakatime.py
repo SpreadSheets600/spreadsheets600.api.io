@@ -6,12 +6,15 @@ BASE = "https://wakatime.com/api/v1"
 
 
 def _headers(config):
+    if config.wakatime_token:
+        return {"authorization": f"Bearer {config.wakatime_token}"}
+
     encoded = base64.b64encode(config.wakatime_api_key.encode()).decode()
     return {"authorization": f"Basic {encoded}"}
 
 
 async def fetch_stats(config):
-    if not config.wakatime_api_key:
+    if not (config.wakatime_token or config.wakatime_api_key):
         return None
 
     headers = _headers(config)
